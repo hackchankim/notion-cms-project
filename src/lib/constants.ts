@@ -5,19 +5,16 @@ export type NavItem = {
 }
 
 export const SITE_CONFIG = {
-  name: "Next.js Starter",
+  name: "교회 설교 아카이브",
   description:
-    "Next.js 16 App Router 기반의 모던 웹 스타터킷. shadcn/ui, Tailwind CSS v4, 다크모드를 기본 지원합니다.",
-  url: "https://github.com/hackchankim/claude-nextjs-starters",
+    "Notion을 CMS로 활용하여 교회 설교 음성파일을 아카이빙하는 블로그입니다. 성도들이 언제든 설교를 다시 들을 수 있습니다.",
+  url: "https://github.com/hackchankim/notion-cms-project",
   author: "hackc",
 }
 
 export const NAV_ITEMS: NavItem[] = [
   { label: "홈", href: "/" },
-  { label: "컴포넌트", href: "/#components" },
-  {
-    label: "GitHub",
-    href: SITE_CONFIG.url,
-    external: true,
-  },
+  { label: "카테고리", href: "/category" },
+  { label: "달력", href: "/calendar" },
+  { label: "검색", href: "/search" },
 ]
