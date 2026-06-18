@@ -4,7 +4,7 @@
 
 ---
 
-## Phase 1. 프로젝트 초기 설정 (골격 구축)
+## Phase 1. 프로젝트 초기 설정 (골격 구축) ✅
 
 > **왜 먼저?** 이후 모든 단계가 Notion API 연결과 타입 정의에 의존한다.  
 > API 키, 환경변수, 데이터 모델이 없으면 컴포넌트도 페이지도 만들 수 없다.
@@ -13,24 +13,24 @@
 
 ### 작업 목록
 
-| # | 작업 | 설명 |
-|---|------|------|
-| 1-1 | Notion API 키 발급 및 DB 공유 | Notion Integration 생성 → DB에 연결 |
-| 1-2 | 환경변수 설정 | `.env.local` 에 `NOTION_API_KEY`, `NOTION_DATABASE_ID` 추가 |
-| 1-3 | 패키지 설치 | `@notionhq/client`, `notion-to-md` 설치 |
-| 1-4 | 공유 타입 정의 | `src/lib/types.ts` — `Post`, `AudioFile`, `NotionBlock` 타입 추가 |
-| 1-5 | Notion 클라이언트 초기화 | `src/lib/notion.ts` — API 클라이언트 싱글턴 생성 |
-| 1-6 | 라우팅 골격 생성 | `app/` 하위에 `/`, `/posts/[id]`, `/category`, `/calendar`, `/search` 빈 페이지 생성 |
+| # | 작업 | 설명 | 상태 |
+|---|------|------|------|
+| 1-1 | Notion API 키 발급 및 DB 공유 | Notion Integration 생성 → DB에 연결 | ✅ |
+| 1-2 | 환경변수 설정 | `.env.local` 에 `NOTION_API_KEY`, `NOTION_DATABASE_ID` 추가 | ✅ |
+| 1-3 | 패키지 설치 | `@notionhq/client` 설치 | ✅ |
+| 1-4 | 공유 타입 정의 | `src/lib/types.ts` — `Post`, `AudioFile`, `PostSummary`, `NotionBlock` 타입 추가 | ✅ |
+| 1-5 | Notion 클라이언트 초기화 | `src/lib/notion.ts` — API 클라이언트 싱글턴 생성 | ✅ |
+| 1-6 | 라우팅 골격 생성 | `app/` 하위에 `/`, `/posts/[id]`, `/category`, `/calendar`, `/search` 빈 페이지 생성 | ✅ |
 
 ### 완료 기준
 
-- `notion.ts` 에서 Notion DB에 정상 연결 가능
-- 모든 라우트가 404 없이 접근 가능
-- `Post`, `AudioFile` 타입이 PRD 데이터 모델과 1:1 매핑됨
+- ✅ `notion.ts` 에서 Notion DB에 정상 연결 가능
+- ✅ 모든 라우트가 404 없이 접근 가능
+- ✅ `Post`, `AudioFile` 타입이 PRD 데이터 모델과 1:1 매핑됨
 
 ---
 
-## Phase 2. 공통 모듈 / 컴포넌트 개발
+## Phase 2. 공통 모듈 / 컴포넌트 개발 ✅
 
 > **왜 먼저?** 핵심 기능 페이지들이 동일한 API 함수, 카드, 플레이어를 공유한다.  
 > 공통 레이어가 없으면 페이지마다 중복 코드가 생기고 나중에 수정 비용이 커진다.
@@ -39,21 +39,21 @@
 
 ### 작업 목록
 
-| # | 작업 | 설명 |
-|---|------|------|
-| 2-1 | Notion API 함수 | `src/lib/notion.ts` — `getPosts()`, `getPost(id)`, `getPostsByCategory()`, `searchPosts(query)` 구현 |
-| 2-2 | 응답 파싱 유틸리티 | Notion API 응답 → `Post` 타입 변환 함수 |
-| 2-3 | 헤더 내비게이션 업데이트 | PRD 메뉴 구조 반영 (홈 / 카테고리 / 달력 / 검색) |
-| 2-4 | `PostCard` 컴포넌트 | 제목, 발행일, 카테고리, 태그 표시하는 카드 UI |
-| 2-5 | `PostList` 컴포넌트 | `PostCard` 목록을 반응형 그리드로 렌더링 |
-| 2-6 | `AudioPlayer` 컴포넌트 | 재생/일시정지, 진행바, 재생 시간 표시 브라우저 내 플레이어 |
-| 2-7 | 로딩 / 에러 / 빈 상태 UI | Skeleton, ErrorMessage, EmptyState 컴포넌트 |
+| # | 작업 | 설명 | 상태 |
+|---|------|------|------|
+| 2-1 | Notion API 함수 | `src/lib/notion.ts` — `getPosts()`, `getPost(id)`, `getPostsByCategory()`, `searchPosts(query)` 구현 | ✅ |
+| 2-2 | 응답 파싱 유틸리티 | Notion API 응답 → `Post` 타입 변환 함수 | ✅ |
+| 2-3 | 헤더 내비게이션 업데이트 | PRD 메뉴 구조 반영 (홈 / 카테고리 / 달력 / 검색) | ✅ |
+| 2-4 | `PostCard` 컴포넌트 | 제목, 발행일, 카테고리, 태그 표시하는 카드 UI | ✅ |
+| 2-5 | `PostList` 컴포넌트 | `PostCard` 목록을 반응형 그리드로 렌더링 | ✅ |
+| 2-6 | `AudioPlayer` 컴포넌트 | 재생/일시정지, 진행바, 재생 시간 표시 브라우저 내 플레이어 | ✅ |
+| 2-7 | 로딩 / 에러 / 빈 상태 UI | Skeleton, ErrorMessage, EmptyState 컴포넌트 | ✅ |
 
 ### 완료 기준
 
-- `getPosts()` 가 Notion DB의 `Status=발행됨` 글을 올바르게 반환
-- `PostCard` 가 Storybook 없이도 `/` 경로에서 테스트 렌더링 가능
-- `AudioPlayer` 가 샘플 URL로 재생/일시정지 동작 확인
+- ✅ `getPosts()` 가 Notion DB의 `Status=발행됨` 글을 올바르게 반환
+- ✅ `PostCard` 가 Storybook 없이도 `/` 경로에서 테스트 렌더링 가능
+- ✅ `AudioPlayer` 가 샘플 URL로 재생/일시정지 동작 확인
 
 ---
 
