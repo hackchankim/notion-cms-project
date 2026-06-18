@@ -51,8 +51,8 @@ export type Post = {
   endVerse: number
   /** 태그 목록 (multi_select 필드, 없으면 빈 배열) */
   tags: string[]
-  /** 설교일자 */
-  publishedAt: Date
+  /** 설교일자 — ISO 8601 문자열 ("2024-06-01") */
+  publishedAt: string
   /** 글 상태 */
   status: PostStatus
   /** 페이지 본문 블록 배열 */

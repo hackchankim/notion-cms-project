@@ -13,11 +13,7 @@ interface PostListProps {
 export function PostList({ posts, emptyMessage = "등록된 설교가 없습니다." }: PostListProps) {
   if (posts.length === 0) {
     return (
-      <EmptyState
-        icon={FileText}
-        title={emptyMessage}
-        description="아직 설교가 등록되지 않았습니다."
-      />
+      <EmptyState icon={FileText} title={emptyMessage} />
     )
   }
 

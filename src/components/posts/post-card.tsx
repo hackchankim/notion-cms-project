@@ -16,7 +16,7 @@ export function PostCard({ post }: PostCardProps) {
         <CardHeader>
           <CardTitle className="line-clamp-2 text-base">{post.title}</CardTitle>
           <CardDescription>
-            {post.publishedAt.toLocaleDateString("ko-KR", {
+            {new Date(post.publishedAt).toLocaleDateString("ko-KR", {
               year: "numeric",
               month: "long",
               day: "numeric",

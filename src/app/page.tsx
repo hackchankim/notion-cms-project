@@ -17,7 +17,7 @@ const DUMMY_POSTS: PostSummary[] = [
     startVerse: 1,
     endVerse: 31,
     tags: ["창조", "시작"],
-    publishedAt: new Date("2024-06-01"),
+    publishedAt: "2024-06-01",
     status: "등록완료",
   },
   {
@@ -28,7 +28,7 @@ const DUMMY_POSTS: PostSummary[] = [
     startVerse: 1,
     endVerse: 6,
     tags: ["목자", "신뢰"],
-    publishedAt: new Date("2024-06-08"),
+    publishedAt: "2024-06-08",
     status: "등록완료",
   },
   {
@@ -39,7 +39,7 @@ const DUMMY_POSTS: PostSummary[] = [
     startVerse: 6,
     endVerse: 6,
     tags: ["예수", "진리"],
-    publishedAt: new Date("2024-06-15"),
+    publishedAt: "2024-06-15",
     status: "등록완료",
   },
 ]

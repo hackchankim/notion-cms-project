@@ -47,3 +47,6 @@ next-env.d.ts
 
 # playwright mcp 런타임 아티팩트
 .playwright-mcp/
+
+# shrimp task manager 데이터
+shrimp_data/

@@ -46,15 +46,27 @@ export function AudioPlayer({ src, title, className }: AudioPlayerProps) {
     }
   }, [])
 
-  function togglePlay() {
+  // src 변경 시 재생 상태 초기화
+  useEffect(() => {
+    setIsPlaying(false)
+    setCurrentTime(0)
+    setDuration(0)
+  }, [src])
+
+  async function togglePlay() {
     const audio = audioRef.current
     if (!audio) return
     if (isPlaying) {
       audio.pause()
+      setIsPlaying(false)
     } else {
-      audio.play()
+      try {
+        await audio.play()
+        setIsPlaying(true)
+      } catch {
+        // 자동재생 차단 또는 네트워크 오류 — UI 상태 변경하지 않음
+      }
     }
-    setIsPlaying(!isPlaying)
   }
 
   function handleSeek(e: React.MouseEvent<HTMLDivElement>) {

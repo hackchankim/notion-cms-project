@@ -63,8 +63,7 @@ function parsePostSummary(page: any): PostSummary {
   const tags: string[] = (props[PROP.tags]?.multi_select ?? []).map(
     (t: { name: string }) => t.name
   )
-  const dateStr: string = props[PROP.publishedAt]?.date?.start ?? page.created_time
-  const publishedAt = new Date(dateStr)
+  const publishedAt: string = props[PROP.publishedAt]?.date?.start ?? page.created_time
   const status = (props[PROP.status]?.select?.name ?? "미등록") as Post["status"]
 
   return { id: page.id, title, category, chapter, startVerse, endVerse, tags, publishedAt, status }
@@ -101,7 +100,10 @@ export async function getPost(id: string): Promise<Post | null> {
     const content = blocksResponse.results as NotionBlock[]
 
     return { ...summary, content }
-  } catch {
+  } catch (error) {
+    if (process.env.NODE_ENV === "development") {
+      console.error("[notion] getPost 오류:", id, error)
+    }
     return null
   }
 }
