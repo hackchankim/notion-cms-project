@@ -2,51 +2,12 @@ import { Container } from "@/components/layout/container"
 import { PostList } from "@/components/posts/post-list"
 import { Separator } from "@/components/ui/separator"
 import { SITE_CONFIG } from "@/lib/constants"
-import type { PostSummary } from "@/lib/types"
+import { getPosts } from "@/lib/notion"
 
-// TODO: ISR 캐싱과 함께 Notion API에서 실제 데이터 조회
-// import { getPosts } from "@/lib/notion"
-
-/** 개발 단계 더미 데이터 — Notion 연동 후 제거 */
-const DUMMY_POSTS: PostSummary[] = [
-  {
-    id: "1",
-    title: "태초에 하나님이 천지를 창조하시니라",
-    category: "창세기",
-    chapter: 1,
-    startVerse: 1,
-    endVerse: 31,
-    tags: ["창조", "시작"],
-    publishedAt: "2024-06-01",
-    status: "등록완료",
-  },
-  {
-    id: "2",
-    title: "주는 나의 목자시니 내게 부족함이 없으리로다",
-    category: "시편",
-    chapter: 23,
-    startVerse: 1,
-    endVerse: 6,
-    tags: ["목자", "신뢰"],
-    publishedAt: "2024-06-08",
-    status: "등록완료",
-  },
-  {
-    id: "3",
-    title: "내가 곧 길이요 진리요 생명이니",
-    category: "요한복음",
-    chapter: 14,
-    startVerse: 6,
-    endVerse: 6,
-    tags: ["예수", "진리"],
-    publishedAt: "2024-06-15",
-    status: "등록완료",
-  },
-]
+export const revalidate = 3600
 
 export default async function HomePage() {
-  // const posts = await getPosts()
-  const posts = DUMMY_POSTS
+  const posts = await getPosts()
 
   return (
     <Container className="py-10">

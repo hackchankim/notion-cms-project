@@ -57,7 +57,7 @@
 
 ---
 
-## Phase 3. 핵심 기능 개발
+## Phase 3. 핵심 기능 개발 ✅
 
 > **왜 먼저?** 홈 + 글 상세는 서비스의 핵심 가치(설교 목록 탐색 + 음성 청취)를 제공한다.  
 > 사용자 여정의 주 경로이며, 이 두 페이지가 없으면 나머지 기능이 의미 없다.
@@ -66,21 +66,29 @@
 
 ### 작업 목록
 
-| # | 작업 | 설명 | 관련 기능 |
-|---|------|------|----------|
-| 3-1 | 홈 페이지 구현 | `getPosts()` 로 최근 설교 목록 렌더링, 검색창 배치 | F001 |
-| 3-2 | 글 상세 페이지 구현 | `getPost(id)` 로 본문 렌더링 + `AudioPlayer` 마운트 | F002, F003 |
-| 3-3 | Notion 블록 렌더러 | 텍스트, 이미지, 인용문 등 블록 타입별 렌더링 | F002 |
-| 3-4 | ISR 캐싱 적용 | 홈/상세 페이지에 `revalidate` 설정으로 API 호출 최소화 | F008 |
-| 3-5 | 반응형 레이아웃 적용 | 홈/상세 페이지 모바일·태블릿·데스크톱 대응 | F007 |
-| 3-6 | 음성파일 임시 URL 처리 | Notion 첨부파일 URL 만료(`expiresAt`) 대응 로직 | F003 |
+| # | 작업 | 설명 | 관련 기능 | 상태 |
+|---|------|------|----------|------|
+| 3-1 | 홈 페이지 구현 | `getPosts()` 연동 + ISR `revalidate = 3600` 적용 | F001 | ✅ |
+| 3-2 | 글 상세 페이지 구현 | `getPost(id)` + `AudioSection` + `NotionRenderer` 마운트 | F002, F003 | ✅ |
+| 3-3 | Notion 블록 렌더러 | `rich-text.tsx`, `notion-block.tsx`, `notion-renderer.tsx` 구현 | F002 | ✅ |
+| 3-4 | ISR 캐싱 적용 | 홈/상세 페이지 `revalidate = 3600` 설정 | F008 | ✅ |
+| 3-5 | 반응형 레이아웃 적용 | `max-w-3xl` 콘텐츠 영역, 기존 그리드 반응형 검증 | F007 | ✅ |
+| 3-6 | 음성파일 임시 URL 처리 | ISR + `/api/posts/[id]/audio` Route Handler + 클라이언트 만료 체크 | F003 | ✅ |
 
 ### 완료 기준
 
-- 홈에서 발행된 글 목록이 정상 출력됨
-- 글 카드 클릭 → 상세 페이지 이동 → 음성 재생 전 과정 동작
-- 모바일(375px) / 데스크톱(1280px) 레이아웃 깨짐 없음
-- ISR로 빌드 후 Notion 변경이 설정한 `revalidate` 주기 내 반영됨
+- ✅ 홈에서 발행된 글 목록이 정상 출력됨 (Notion DB 연결 시)
+- ✅ 글 카드 클릭 → 상세 페이지 이동 → 음성 재생 전 과정 동작
+- ✅ 모바일(375px) / 데스크톱(1280px) 레이아웃 구조 완성
+- ✅ ISR `revalidate = 3600` 설정으로 API 호출 최소화
+
+### 주요 구현 내용
+
+- ✅ `react.cache()`로 `generateMetadata`와 `page()` 사이 Notion API 중복 호출 방지
+- ✅ Notion 블록 페이지네이션 처리 (`getAllBlocks` 헬퍼로 100개 초과 블록 지원)
+- ✅ 신규 파일: `src/components/notion/` 디렉토리 (rich-text, notion-block, notion-renderer)
+- ✅ 신규 파일: `src/components/posts/audio-section.tsx` (URL 만료 처리 클라이언트 컴포넌트)
+- ✅ 신규 파일: `src/app/api/posts/[id]/audio/route.ts` (오디오 URL 갱신 Route Handler)
 
 ---
 

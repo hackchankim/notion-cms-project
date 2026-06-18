@@ -8,8 +8,9 @@
  *   NOTION_DATABASE_ID  — 설교 데이터베이스 ID (= data_source_id)
  */
 
+import { cache } from "react"
 import { Client, isFullPage } from "@notionhq/client"
-import type { Post, PostSummary, NotionBlock } from "./types"
+import type { AudioFile, Post, PostSummary, NotionBlock } from "./types"
 
 /** Notion 데이터베이스 ID (v5에서는 data_source_id로 사용) */
 export const NOTION_DATABASE_ID = process.env.NOTION_DATABASE_ID ?? ""
@@ -83,21 +84,38 @@ export async function getPosts(): Promise<PostSummary[]> {
   return response.results.filter(isFullPage).map(parsePostSummary)
 }
 
+/** 페이지네이션을 처리하여 모든 하위 블록 조회 */
+async function getAllBlocks(notion: Client, blockId: string): Promise<NotionBlock[]> {
+  const blocks: NotionBlock[] = []
+  let cursor: string | undefined
+
+  do {
+    const response = await notion.blocks.children.list({
+      block_id: blockId,
+      start_cursor: cursor,
+      page_size: 100,
+    })
+    blocks.push(...(response.results as NotionBlock[]))
+    cursor = response.has_more && response.next_cursor ? response.next_cursor : undefined
+  } while (cursor)
+
+  return blocks
+}
+
 /** 단일 설교 조회 (본문 블록 포함) — 없으면 null */
-export async function getPost(id: string): Promise<Post | null> {
+export const getPost = cache(async function getPost(id: string): Promise<Post | null> {
   const notion = tryGetClient()
   if (!notion) return null
 
   try {
-    const [page, blocksResponse] = await Promise.all([
+    const [page, content] = await Promise.all([
       notion.pages.retrieve({ page_id: id }),
-      notion.blocks.children.list({ block_id: id }),
+      getAllBlocks(notion, id),
     ])
 
     if (!isFullPage(page)) return null
 
     const summary = parsePostSummary(page)
-    const content = blocksResponse.results as NotionBlock[]
 
     return { ...summary, content }
   } catch (error) {
@@ -106,7 +124,7 @@ export async function getPost(id: string): Promise<Post | null> {
     }
     return null
   }
-}
+})
 
 /** 성경본문(카테고리)별 설교 목록 조회 */
 export async function getPostsByCategory(category: string): Promise<PostSummary[]> {
@@ -125,6 +143,24 @@ export async function getPostsByCategory(category: string): Promise<PostSummary[
   })
 
   return response.results.filter(isFullPage).map(parsePostSummary)
+}
+
+/** content 블록 배열에서 audio 블록을 AudioFile 목록으로 추출 */
+export function extractAudioBlocks(blocks: NotionBlock[], postId: string): AudioFile[] {
+  return blocks
+    .filter((b) => b.type === "audio")
+    .map((b) => {
+      const audio = b.audio
+      const isFile = audio?.type === "file"
+      return {
+        id: b.id,
+        postId,
+        url: isFile ? audio.file.url : (audio?.external?.url ?? ""),
+        name: audio?.caption?.[0]?.plain_text ?? "설교 음성",
+        expiresAt: isFile ? new Date(audio.file.expiry_time) : undefined,
+      } satisfies AudioFile
+    })
+    .filter((f) => f.url !== "")
 }
 
 /** 제목 키워드 검색 */

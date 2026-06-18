@@ -34,24 +34,25 @@ export function AudioPlayer({ src, title, className }: AudioPlayerProps) {
     const onTimeUpdate = () => setCurrentTime(audio.currentTime)
     const onLoadedMetadata = () => setDuration(audio.duration)
     const onEnded = () => setIsPlaying(false)
+    // src 변경 시 브라우저가 발생시키는 emptied 이벤트로 상태 초기화
+    const onEmptied = () => {
+      setIsPlaying(false)
+      setCurrentTime(0)
+      setDuration(0)
+    }
 
     audio.addEventListener("timeupdate", onTimeUpdate)
     audio.addEventListener("loadedmetadata", onLoadedMetadata)
     audio.addEventListener("ended", onEnded)
+    audio.addEventListener("emptied", onEmptied)
 
     return () => {
       audio.removeEventListener("timeupdate", onTimeUpdate)
       audio.removeEventListener("loadedmetadata", onLoadedMetadata)
       audio.removeEventListener("ended", onEnded)
+      audio.removeEventListener("emptied", onEmptied)
     }
   }, [])
-
-  // src 변경 시 재생 상태 초기화
-  useEffect(() => {
-    setIsPlaying(false)
-    setCurrentTime(0)
-    setDuration(0)
-  }, [src])
 
   async function togglePlay() {
     const audio = audioRef.current
